@@ -1,0 +1,2 @@
+// displays num of doc's
+db.school.find().count();
