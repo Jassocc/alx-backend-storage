@@ -1,0 +1,2 @@
+// deletes doc's related to specified name
+db.school.deleteMany({name: "Holberton school"});
