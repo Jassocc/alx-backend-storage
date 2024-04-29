@@ -10,7 +10,7 @@ def print_request_logs(nginx_collection):
     prints nginx logs
     """
     print('{} logs'.format(nginx_collection.count_documents({})))
-    print('Methods')
+    print('Methods:')
     metho = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE']
     for method in metho:
         req_c = len(list(nginx_collection.find({'method': method})))
