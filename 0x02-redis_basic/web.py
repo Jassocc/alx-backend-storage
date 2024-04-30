@@ -27,7 +27,7 @@ def data_cacher(method):
         cached_value = redis_store.get(key)
         if cached_value:
             return cached_value.decode('utf-8')
-        key_count = "count:" +url
+        key_count = "count:" + url
         html_c = method(url)
         redis_store.incr(key_count)
         redis_store.set(key, html_c, ex=10)
