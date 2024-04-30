@@ -14,23 +14,25 @@ instance of redis module
 """
 
 
-def data_cacher(method: Callable) -> Callable:
+def data_cacher(method):
     """
     caches output data
     """
     @wraps(method)
-    def invoker(url) -> str:
+    def invoker(url):
         """
         wrapper function for caching
         """
-        redis_store.incr(f'count:{url}')
-        result = redis_store.get(f'result:{url}')
-        if result:
-            return result.decode('utf-8')
-        result = method(url)
-        redis_store.set(f'count:{url}')
-        redis_store.setex(f'result:{url}', 10, result)
-        return result
+        key = "cached:" + url
+        cached_value = redis_store.get(key)
+        if cached_value:
+            return cached_value.decode('utf-8')
+        key_count = "count:" +url
+        html_c = method(url)
+        redis_store.incr(key_count)
+        redis_store.set(key, html_c, ex=10)
+        redis_store.expire(key, 10)
+        return html_c
     return invoker
 
 
@@ -40,3 +42,7 @@ def get_page(url: str) -> str:
     returns the content of url's
     """
     return requests.get(url).text
+
+
+if __name__ == "__main__":
+    get_page('http://slowwly.robertomurray.co.uk')
