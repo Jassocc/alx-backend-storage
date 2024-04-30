@@ -23,7 +23,7 @@ def data_cacher(method):
         """
         wrapper function for caching
         """
-        cach_con = redis_store.get(f"cache:{url}")
+        cach_con = redis_store.get(f"cached:{url}")
         if cach_con:
             return cach_con.decode('utf-8')
         con = method(url)
