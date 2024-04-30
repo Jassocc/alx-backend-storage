@@ -27,7 +27,7 @@ def data_cacher(method):
         if cach_con:
             return cach_con.decode('utf-8')
         con = method(url)
-        redis_store.setex(f"cached:{url}", 10, con
+        redis_store.setex(f"cached:{url}", 10, con)
         return con
     return invoker
 
@@ -40,7 +40,3 @@ def get_page(url: str) -> str:
     counter = redis_store.incr(f"count:{url}")
     con = requests.get(url).text
     return con
-
-
-#if __name__ == "__main__":
-    #get_page('http://slowwly.robertomurray.co.uk')
