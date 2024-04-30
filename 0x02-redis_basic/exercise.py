@@ -63,8 +63,8 @@ def replay(fn: Callable) -> None:
     fxn_outputs = redis_store.lrange(output_key, 0, -1)
     for fxn_input, fxn_output in zip(fxn_inputs, fxn_outputs):
         print('{}(*{}) -> {}'.format(fxn_name,
-            fxn_input.decode("utf-8"),
-            fxn_output))
+              fxn_input.decode("utf-8"),
+              fxn_output))
 
 
 class Cache:
