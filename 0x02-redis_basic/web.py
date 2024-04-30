@@ -19,20 +19,16 @@ def data_cacher(method):
     caches output data
     """
     @wraps(method)
-    def invoker(url):
+    def invoker(url: str):
         """
         wrapper function for caching
         """
-        key = "cached:" + url
-        cached_value = redis_store.get(key)
-        if cached_value:
-            return cached_value.decode('utf-8')
-        key_count = "count:" + url
-        html_c = method(url)
-        redis_store.incr(key_count)
-        redis_store.set(key, html_c, ex=10)
-        redis_store.expire(key, 10)
-        return html_c
+        cach_con = redis_store.get(f"cache:{url}")
+        if cach_con:
+            return cach_con.decode('utf-8')
+        con = method(url)
+        redis_store.setex(f"cached:{url}", 10, con
+        return con
     return invoker
 
 
@@ -41,8 +37,10 @@ def get_page(url: str) -> str:
     """
     returns the content of url's
     """
-    return requests.get(url).text
+    counter = redis_store.incr(f"count:{url}")
+    con = requests.get(url).text
+    return con
 
 
-if __name__ == "__main__":
-    get_page('http://slowwly.robertomurray.co.uk')
+#if __name__ == "__main__":
+    #get_page('http://slowwly.robertomurray.co.uk')
